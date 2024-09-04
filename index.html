@@ -1,19 +1,53 @@
-<!--index.html-->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
 
-    <!-- 您也可以此进程中运行其他文件 -->
-    <script src="./renderer.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
+  <style>
+    /* 定义背景颜色样式，使用更高优先级的选择器 */
+    body {
+      /* background-color: #e9f0f9 !important; */
+      /* 使用 !important 确保优先级 */
+      overflow-y: hidden;
+      /* 禁用竖直滚动条 */
+    }
+
+    button {
+      -webkit-app-region: no-drag;
+    }
+  </style>
+  <title>桌面小组件</title>
+  <!-- 引入Tabler CSS -->
+  <link href="./node_modules/@tabler/core/dist/css/tabler.min.css" rel="stylesheet">
+  <!-- 引入SweetAlert2 CSS -->
+  <link href="./node_modules/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+</head>
+
+<body style="text-align: center; -webkit-app-region: drag">
+  <div class="page user-select-none">
+    <div class="page-wrapper">
+      <div class="container-xl">
+        <h1>泥嚎！今天是<span id="dateNow"></span></h1>
+        <table class="table table-responsive">
+          <thead>
+            <tr id="dutyTitle">
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="dutyName">
+            </tr>
+          </tbody>
+        </table>
+        <p id="hitokoto_text" onclick="requestHitokoto()" style="-webkit-app-region: no-drag;">好好学习，天天向上</p>
+      </div>
+    </div>
+  </div>
+  <!-- 引入Tabler JS -->
+  <script src="./node_modules/@tabler/core/dist/js/tabler.min.js"></script>
+  <script src="./node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+  <script src="./renderer.js" type="module"></script>
+  <script src="./index.js"></script>
+</body>
+
 </html>
