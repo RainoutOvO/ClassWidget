@@ -18,8 +18,8 @@ const createWindow = () => {
       nodeIntegration: false
     },
 
-    // frame: false, //取消window自带的关闭最小化等
-    // resizable: false //禁止改变主窗口尺寸
+    frame: false, //取消window自带的关闭最小化等
+    resizable: false //禁止改变主窗口尺寸
 
   })
 
@@ -27,7 +27,7 @@ const createWindow = () => {
   mainWindow.loadFile('index.html')
 
   // 打开开发工具
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 }
 
 // 这段程序将会在 Electron 结束初始化

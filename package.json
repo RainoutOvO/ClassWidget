@@ -6,8 +6,25 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+		"postinstall": "electron-builder install-app-deps",
+		"build": "electron-builder --mac --windows --linux",
+		"release": "electron-builder --mac --windows --linux --publish always"
   },
+	"build": {
+		"appId": "com.rainout.classwidget",
+		"productName": "班级小组件",
+		"mac": {
+			"category": "public.app-category.education"
+		},
+		"dmg": {
+			"icon": false
+		},
+		"linux": {
+			"target": ["AppImage"],
+			"category": "Education"
+		}
+	},
   "author": "WANG Yuchen",
   "license": "LGPL-3.0-or-later",
   "devDependencies": {
