@@ -1,39 +1,31 @@
-# Action 名称，可自定义
 name: Build/release
 
-# 触发事件：提交名称以 v 开头的 tag 时触发
-on:
-  push:
-    tags:
-      - 'v*.*.*'
-  workflow_dispatch:
+on: push
 
-# 执行的任务
 jobs:
   release:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        # 运行环境：这里配置了 macos 和 windows，最终会在这两个环境打包
-        os: [macos-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
-    # 执行步骤
     steps:
-      # 检出代码
       - name: Check out Git repository
         uses: actions/checkout@v1
 
-      # 安装环境
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
         with:
-          node-version: 20.x
+          node-version: 16
 
-      # 打包发布：源码见 https://github.com/classfang/action-electron-builder
       - name: Build/release Electron app
-        uses: classfang/action-electron-builder@v1.0.0
+        uses: Yan-Jobs/action-electron-builder@v1.7.0
         with:
           # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
           github_token: ${{ secrets.github_token }}
-          release: true
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
