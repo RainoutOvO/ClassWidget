@@ -28,7 +28,7 @@ jobs:
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
         with:
-          node-version: 20
+          node-version: 20.x
 
       # 打包发布：源码见 https://github.com/classfang/action-electron-builder
       - name: Build/release Electron app
