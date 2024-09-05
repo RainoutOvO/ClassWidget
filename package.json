@@ -1,7 +1,47 @@
 {
-  "name": "ClassWidget",
-  "packageManager": "yarn@4.4.1",
+  "name": "classwidget",
+  "version": "1.0.0",
+  "description": "An desktop widget to show mutiple info.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+		"postinstall": "electron-builder install-app-deps",
+		"build": "electron-builder --mac --windows --linux",
+		"release": "electron-builder --mac --windows --linux --publish always"
+  },
+	"build": {
+		"appId": "com.rainout.classwidget",
+		"productName": "班级小组件",
+		"mac": {
+			"category": "public.app-category.education"
+		},
+		"dmg": {
+			"icon": false
+		},
+		"linux": {
+			"target": ["AppImage"],
+			"category": "Education"
+		}
+	},
+  "author": "WANG Yuchen",
+  "license": "LGPL-3.0-or-later",
   "devDependencies": {
-    "electron-builder": "^25.0.5"
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron/fuses": "^1.8.0",
+    "electron": "^32.0.1",
+    "electron-builder": "^23.0.0"
+  },
+  "dependencies": {
+    "@tabler/core": "^1.0.0-beta20",
+    "electron-squirrel-startup": "^1.0.1",
+    "sweetalert2": "^11.13.2"
   }
 }
