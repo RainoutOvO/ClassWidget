@@ -41,6 +41,7 @@
   "dependencies": {
     "@tabler/core": "^1.0.0-beta20",
     "electron-squirrel-startup": "^1.0.1",
-    "sweetalert2": "^11.13.2"
+    "sweetalert2": "^11.13.2",
+    "electron-builder": "^23.0.0"
   }
 }
