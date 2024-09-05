@@ -6,6 +6,7 @@ on:
   push:
     tags:
       - 'v*.*.*'
+  workflow_dispatch:
 
 # 执行的任务
 jobs:
