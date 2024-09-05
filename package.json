@@ -7,24 +7,26 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-		"postinstall": "electron-builder install-app-deps",
-		"build": "electron-builder --windows",
-		"release": "electron-builder --windows --publish always"
+    "postinstall": "electron-builder install-app-deps",
+    "build": "electron-builder --windows",
+    "release": "electron-builder --windows --publish always"
   },
-	"build": {
-		"appId": "com.rainout.classwidget",
-		"productName": "班级小组件",
-		"mac": {
-			"category": "public.app-category.education"
-		},
-		"dmg": {
-			"icon": false
-		},
-		"linux": {
-			"target": ["AppImage"],
-			"category": "Education"
-		}
-	},
+  "build": {
+    "appId": "com.rainout.classwidget",
+    "productName": "班级小组件",
+    "mac": {
+      "category": "public.app-category.education"
+    },
+    "dmg": {
+      "icon": false
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Education"
+    }
+  },
   "author": "WANG Yuchen",
   "license": "LGPL-3.0-or-later",
   "devDependencies": {
@@ -41,6 +43,7 @@
   },
   "dependencies": {
     "@tabler/core": "^1.0.0-beta20",
+    "electron-forge": "^5.2.4",
     "electron-squirrel-startup": "^1.0.1",
     "sweetalert2": "^11.13.2"
   }

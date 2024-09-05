@@ -131,7 +131,7 @@ function getNewConfig(uuidRoute, version = 0) {
         }
       })
       .catch(error => {
-        console.error('Error fetching new config:', error);
+        alert('Error fetching new config:', error);
         reject(error);
       });
   });
