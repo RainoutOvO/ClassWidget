@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 
 
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -22,6 +23,22 @@ const createWindow = () => {
     resizable: false //禁止改变主窗口尺寸
 
   })
+  // 开机是否自启动
+  const isDevelopment = process.env.NODE_ENV == "development";
+  //注意：非开发环境
+  if (!isDevelopment) {
+    if (process.platform === "darwin") {
+      app.setLoginItemSettings({
+        openAtLogin: true,//是否开机启动
+        openAsHidden: false//是否隐藏主窗体，保留托盘位置
+      });
+    } else {
+      app.setLoginItemSettings({
+        openAtLogin: true,
+        openAsHidden: false,
+      });
+    }
+  }
 
   // 加载 index.html
   mainWindow.loadFile('index.html')
