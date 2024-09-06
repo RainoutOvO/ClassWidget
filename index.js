@@ -74,11 +74,11 @@ async function readConfig(online = true) {
       throw new Error('Config file is missing or empty');
     }
     // 提示配置文件
-    const hitokoto = document.querySelector('#hitokoto_text')
-    hitokoto.innerText =("已读取配置："+config.year + "级" + config.class + "班" + config.teacher + "\n" + config.classroomName + "教室");
+    const dutyNotice = document.querySelector('#dutyTitle')
+    dutyNotice.innerText = ("已读取配置：" + config.year + "级" + config.class + "班" + config.teacher + "\n" + config.classroomName + "教室");
     // 欢迎语
     const welcome = document.querySelector('#welcome')
-    welcome.innerText = "欢迎您！这里是"+config.classroomName+"！";
+    welcome.innerText = "欢迎您！这里是" + config.classroomName + "！";
     if (online && await getNewConfig(config.route, config.version)) {
       await readConfig();
       return;
@@ -119,19 +119,50 @@ function deployConfig(config, dateWeek) {
 // 在线获取新配置
 function getNewConfig(uuidRoute, version = 0) {
   return new Promise((resolve, reject) => {
-    fetch('https://github.moeyy.xyz/https://raw.githubusercontent.com/RainoutOvO/ClassWidget/rc/' + uuidRoute)
+    fetch('http://github.moeyy.xyz/https://raw.githubusercontent.com/RainoutOvO/ClassWidget/rc/' + uuidRoute)
       .then(response => response.json())
       .then(data => {
         if (data.version > version) {
           window.electronAPI.writeConfig(data);
-          console.log('Write Config Response:', data);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "success",
+            title: '新配置获取成功！',
+            text: "配置信息" + data.year + "级" + data.class + "班" + data.teacher + "\n" + data.classroomName + "教室 v" + data.version
+          });
           resolve(true);
         } else {
           resolve(false);
         }
       })
       .catch(error => {
-        alert('Error fetching new config:', error);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "middle",
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          // timer: 3000,
+          // timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: "error",
+          title: '新配置获取失败QAQ',
+          text: '请检查班级ID是否正确，网络是否连通，然后重启软件重试'
+        });
         reject(error);
       });
   });
@@ -182,16 +213,16 @@ async function KeyCode() {
     allowOutsideClick: false,
     title: "嗨，别来无恙啊",
     input: "text",
-    inputLabel: "班级授权码",
+    inputLabel: "班级ID",
     showCancelButton: false,
     inputValidator: (value) => {
       if (!value) {
-        return "您必须输入班级授权码才能继续。";
+        return "您必须输入班级ID才能继续。";
       }
     }
   });
   if (keyCode) {
-    await getNewConfig(keyCode,0);
+    await getNewConfig(keyCode, 0);
     main();
   }
 }
