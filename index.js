@@ -78,7 +78,7 @@ async function readConfig(online = true) {
     hitokoto.innerText =("已读取配置："+config.year + "级" + config.class + "班" + config.teacher + "\n" + config.classroomName + "教室");
     // 欢迎语
     const welcome = document.querySelector('#welcome')
-    welcome.innerText = "欢迎！这里是"+config.classroomName+"教室！";
+    welcome.innerText = "欢迎您！这里是"+config.classroomName+"！";
     if (online && await getNewConfig(config.route, config.version)) {
       await readConfig();
       return;
