@@ -7,10 +7,9 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-		"postinstall": "electron-builder install-app-deps",
-		"build": "electron-builder",
-		"release": "electron-builder --publish always"
-}
+    "postinstall": "electron-builder install-app-deps",
+    "build": "electron-builder",
+    "release": "electron-builder --publish always"
   },
   "build": {
     "appId": "com.rainout.classwidget",
