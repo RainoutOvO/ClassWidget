@@ -119,7 +119,7 @@ function deployConfig(config, dateWeek) {
 // 在线获取新配置
 function getNewConfig(uuidRoute, version = 0) {
   return new Promise((resolve, reject) => {
-    fetch('https://rainoutovo.github.io/ClassWidget/' + uuidRoute)
+    fetch('https://github.moeyy.xyz/https://raw.githubusercontent.com/RainoutOvO/ClassWidget/rc/' + uuidRoute)
       .then(response => response.json())
       .then(data => {
         if (data.version > version) {
