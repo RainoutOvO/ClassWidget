@@ -66,23 +66,67 @@ async function changeCheck(w = 1) {
   }
 }
 
+function startCountdown(time, alertName) {
+
+  const targetDate = new Date(time);
+
+  if (isNaN(targetDate.getTime())) {
+    return 'Invalid date format';
+  }
+
+  function updateCountdown() {
+    const currentDate = new Date();
+    const timeDifference = targetDate - currentDate;
+
+    if (timeDifference <= 0) {
+      clearInterval(intervalId);
+      document.getElementById('welcome').innerText = alertName + '倒计时结束';
+      return;
+    }
+
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+    const countdownString = `距离${alertName}还剩${days}天${hours}小时${minutes}分钟${seconds}秒`;
+
+    // 插入到 <h1 id="welcome"> 中
+    const welcomeElement = document.getElementById('welcome');
+    if (welcomeElement) {
+      welcomeElement.innerText = countdownString;
+    }
+  }
+
+  // 每秒更新一次倒计时
+  const intervalId = setInterval(updateCountdown, 1000);
+  updateCountdown(); // 立即调用一次以显示初始倒计时
+}
+
 // 读取配置文件
-async function readConfig(online = true) {
+async function readConfig() {
   try {
     const config = await window.electronAPI.readConfig();
-    if (!config || Object.keys(config).length === 0) {
-      throw new Error('Config file is missing or empty');
-    }
-    if (config.online && await getNewConfig(config.route, config.version)) {
+    if (!config || Object.keys(config).length == 0) {
+      console.error('Config file is missing or empty');
+      await getNewConfig(config.route, config.version);
       await readConfig();
       return;
     }
+    if (config.online) {
+      if (await getNewConfig(config.route, config.version)) {
+        await readConfig();
+        return;
+      }
+    }
+
     // 提示配置文件
     const dutyNotice = document.querySelector('#dutyTitle')
     dutyNotice.innerText = ("已读取配置：" + config.year + "级" + config.class + "班" + config.teacher + "\n" + config.classroomName + "教室");
     // 欢迎语
     const welcome = document.querySelector('#welcome')
     welcome.innerText = "欢迎您！这里是" + config.classroomName + "！";
+    if (config.countdown.inUse==1) startCountdown(config.countdown.time, config.countdown.name);
     const dateToday = await dateConfirm();
     deployConfig(config, dateToday);
   } catch (error) {
