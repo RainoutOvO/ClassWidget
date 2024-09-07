@@ -70,17 +70,28 @@ app.on('window-all-closed', () => {
 // 在当前文件中你可以引入所有的主进程代码
 // 也可以拆分成几个文件，然后用 require 导入。
 
-
+// 获取用户的应用程序数据目录
+const userDataPath = app.getPath('userData');
+const configPath = path.join(userDataPath, 'cwConfig.json');
+console.error (configPath);
 // 读取配置文件
 ipcMain.handle('read-config', async () => {
-  const configPath = path.join(__dirname, 'config.json');
-  const data = fs.readFileSync(configPath, 'utf-8');
-  return JSON.parse(data);
+  try {
+    const data = fs.readFileSync(configPath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error(`Error reading config file: ${error.message}`);
+    return { status: 'error', message: error.message };
+  }
 });
 
 // 写入配置文件
 ipcMain.handle('write-config', async (event, newConfig) => {
-  const configPath = path.join(__dirname, 'config.json');
-  fs.writeFileSync(configPath, JSON.stringify(newConfig, null, 2), 'utf-8');
-  return { status: 'success' };
+  try {
+    fs.writeFileSync(configPath, JSON.stringify(newConfig, null, 2), 'utf-8');
+    return { status: 'success' };
+  } catch (error) {
+    console.error(`Error writing config file: ${error.message}`);
+    return { status: 'error', message: error.message };
+  }
 });

@@ -73,16 +73,16 @@ async function readConfig(online = true) {
     if (!config || Object.keys(config).length === 0) {
       throw new Error('Config file is missing or empty');
     }
+    if (config.online && await getNewConfig(config.route, config.version)) {
+      await readConfig();
+      return;
+    }
     // 提示配置文件
     const dutyNotice = document.querySelector('#dutyTitle')
     dutyNotice.innerText = ("已读取配置：" + config.year + "级" + config.class + "班" + config.teacher + "\n" + config.classroomName + "教室");
     // 欢迎语
     const welcome = document.querySelector('#welcome')
     welcome.innerText = "欢迎您！这里是" + config.classroomName + "！";
-    if (online && await getNewConfig(config.route, config.version)) {
-      await readConfig();
-      return;
-    }
     const dateToday = await dateConfirm();
     deployConfig(config, dateToday);
   } catch (error) {
