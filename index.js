@@ -109,12 +109,16 @@ async function readConfig() {
     const config = await window.electronAPI.readConfig();
     if (!config || Object.keys(config).length == 0) {
       console.error('Config file is missing or empty');
-      await getNewConfig(config.route, config.version);
+      const newConfigFetched = await getNewConfig(config.route, config.version);
+      if (!newConfigFetched) {
+        throw new Error('Failed to fetch new config and no local config available');
+      }
       await readConfig();
       return;
     }
     if (config.online) {
-      if (await getNewConfig(config.route, config.version)) {
+      const newConfigFetched = await getNewConfig(config.route, config.version);
+      if (newConfigFetched) {
         await readConfig();
         return;
       }
@@ -126,7 +130,7 @@ async function readConfig() {
     // 欢迎语
     const welcome = document.querySelector('#welcome')
     welcome.innerText = "欢迎您！这里是" + config.classroomName + "！";
-    if (config.countdown.inUse==1) startCountdown(config.countdown.time, config.countdown.name);
+    if (config.countdown.inUse == 1) startCountdown(config.countdown.time, config.countdown.name);
     const dateToday = await dateConfirm();
     deployConfig(config, dateToday);
   } catch (error) {
@@ -163,7 +167,7 @@ function deployConfig(config, dateWeek) {
 // 在线获取新配置
 function getNewConfig(uuidRoute, version = 0) {
   return new Promise((resolve, reject) => {
-    fetch('http://github.moeyy.xyz/https://raw.githubusercontent.com/RainoutOvO/ClassWidget/rc/' + uuidRoute+"?"+Date.now())
+    fetch('https://mirror.ghproxy.com/https://raw.githubusercontent.com/RainoutOvO/ClassWidget/rc/' + uuidRoute+"?"+Date.now())
       .then(response => response.json())
       .then(data => {
         if (data.version > version) {
@@ -207,7 +211,7 @@ function getNewConfig(uuidRoute, version = 0) {
           title: '新配置获取失败QAQ',
           text: '请检查班级ID是否正确，网络是否连通，然后重启软件重试'
         });
-        reject(error);
+        resolve(false);
       });
   });
 }
